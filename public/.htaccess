@@ -1,0 +1,23 @@
+
+# Habilitar RewriteEngine
+RewriteEngine On
+
+# Redireccionar todo al index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Seguridad: evitar acceso directo a archivos sensibles
+<FilesMatch "^\.env">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "composer\.(json|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteRule ^vendor/.*$ - [F,L]
+</IfModule>

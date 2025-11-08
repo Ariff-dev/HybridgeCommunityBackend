@@ -5,10 +5,10 @@ services:
     restart: unless-stopped
 
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQLI_ROOT_PASSWORD}"
-      MYSQL_DATABASE: "${MYSQLI_DATABASE_NAME}"
-      MYSQL_USER: "${MYSQLI_USER}"
-      MYSQL_PASSWORD: "${MYSQLI_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASS}"
 
     ports:
       - "2025:3306"
