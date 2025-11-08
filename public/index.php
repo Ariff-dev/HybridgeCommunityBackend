@@ -1,8 +1,10 @@
 <?php
 
+$projectRoot = dirname(__DIR__);
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
+require_once $projectRoot . '/vendor/autoload.php';
 header('Content-Type: application/json; charset=utf-8;');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
