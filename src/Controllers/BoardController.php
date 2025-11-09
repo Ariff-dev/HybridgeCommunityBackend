@@ -18,8 +18,10 @@ class BoardController {
         if ($requiredPermission) {
             requirePermission($this->apiKeyData, $requiredPermission);
         }
-        
     }
+
+
+
 
 
 
