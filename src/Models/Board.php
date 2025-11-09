@@ -17,6 +17,7 @@ class BoardItem {
     }
 
     // GET
+
     public function getAll() {
         $query = "SELECT * FROM {$this->table} ORDER BY create_at DESC";
         $stmt = $this->conn->prepare($query);
@@ -53,7 +54,6 @@ class BoardItem {
         $stmt = $this->conn->prepare($query);
 
         //Clean data
-          // Limpiar datos
         $this->name = htmlspecialchars(strip_tags($this->name));
         $this->description = htmlspecialchars(strip_tags($this->description));
         $this->state = htmlspecialchars(strip_tags($this->state));
@@ -73,11 +73,32 @@ class BoardItem {
 
     }
 
+    //UPDATE
 
+    public function update() {
+        $query = "UPDATE {$this->table} 
+                    SET name = :name,
+                        description = :description,
+                        state = :state,
+                        assigned = :assigned
+                    WHERE id_board = :id";
 
+        $stmt = $this->conn->prepare($query);
 
+        // Limpiar datos
+        $this->name = htmlspecialchars(strip_tags($this->name));
+        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->state = htmlspecialchars(strip_tags($this->state));
 
+        // Bind
+        $stmt->bindParam(':name', $this->name);
+        $stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':state', $this->state);
+        $stmt->bindParam(':assigned', $this->assigned);
+        $stmt->bindParam(':id', $this->id_board, PDO::PARAM_INT);
 
+        return $stmt->execute();
+    }
 
 
 }
