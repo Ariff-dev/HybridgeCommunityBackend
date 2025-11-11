@@ -75,12 +75,41 @@ class BoardController {
         } catch (PDOException $e) {
             http_response_code(500);
             echo json_encode([
-                 'error' => true,
-                'message' => $e->getMessage() 
+                'error' => true,
+                'message' => $e->getMessage()
             ]);
         }
     }
 
+    public function update($id = null) {
+        $this->authenticate('write');
+
+        $data = json_decode(file_get_contents("php://input"),true);
+
+        if (!isset($data['id_board'])) {
+            http_response_code(400);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Expected items not found'
+            ]);
+            return;
+        }
+
+        try {
+            $this->boardItem->id_board = $data['id_board'];
+            $this->boardItem->name = $data['name'];
+            $this->boardItem->description = $data['description'];
+            $this->boardItem->state = $data['state'];
+            $this->boardItem->assigned = $data['assigned'];
+
+        } catch (PDOException $e) {
+            http_response_code(500);
+              echo json_encode([
+                'error' => true,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 
 
 
