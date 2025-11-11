@@ -88,7 +88,6 @@ class ApiKeyAuth {
         exit();
     }
 
-
 }
 
 /**
