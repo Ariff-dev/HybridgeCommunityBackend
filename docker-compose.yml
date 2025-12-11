@@ -1,21 +1,42 @@
+version: '3.8'
+
 services:
+  # PHP Service
+  php:
+    image: php:8.2-cli
+    container_name: hybridge_php
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    ports:
+      - "8000:8000"
+    networks:
+      - dev_network_community
+    depends_on:
+      - mariadb
+    command: >
+      bash -c " apt-get update &&  apt-get install -y libzip-dev zip unzip git curl && docker-php-ext-install pdo pdo_mysql zip && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && composer install && php -S 0.0.0.0:8000 -t public "
+    environment:
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+    stdin_open: true
+    tty: true
+
+  # MariaDB Service
   mariadb:
     image: mariadb:11.5
-    container_name: hybridge_community_dev
+    container_name: hybridge_mariadb
     restart: unless-stopped
-
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${DB_NAME}"
       MYSQL_USER: "${DB_USER}"
       MYSQL_PASSWORD: "${DB_PASS}"
-
     ports:
       - "2025:3306"
-    
     volumes:
       - mariadb_data:/var/lib/mysql
-
+      - ./database_schema.sql:/docker-entrypoint-initdb.d/schema.sql
     networks:
       - dev_network_community
 

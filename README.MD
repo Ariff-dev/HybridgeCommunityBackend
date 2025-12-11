@@ -1,133 +1,135 @@
-# 🚀 HybridgeCommunityBackend - JWT Authentication API
+# HybridgeCommunityBackend - JWT Authentication API
 
-API REST desarrollada en PHP con autenticación JWT para gestión de usuarios y tableros (boards).
+REST API developed in PHP with JWT authentication for user and board management.
 
-## ✨ Características
+## Features
 
-- ✅ Autenticación JWT (Access + Refresh Tokens)
-- ✅ Hash de contraseñas con bcrypt
-- ✅ CRUD de usuarios
-- ✅ CRUD de tableros (boards)
-- ✅ Rutas protegidas con middleware
-- ✅ Validación de datos
-- ✅ Base de datos MariaDB
-- ✅ Docker para desarrollo
-- ✅ Documentación completa
+- JWT Authentication (Access + Refresh Tokens)
+- Password hashing with bcrypt
+- User CRUD operations
+- Board CRUD operations
+- Protected routes with middleware
+- Input validation
+- MariaDB database
+- Docker for development
+- Comprehensive documentation
 
 ---
 
-## 📋 Requisitos
+## Requirements
 
 - PHP 8.x
 - Composer
-- Docker Desktop (para base de datos)
+- Docker Desktop (for database)
 - MariaDB 11.5
 
 ---
 
-## 🔧 Instalación
+## Installation
 
-### 1. Clonar el repositorio
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/Ariff-dev/HybridgeCommunityBackend.git
 cd HybridgeCommunityBackend
 ```
 
-### 2. Instalar dependencias
+### 2. Install Dependencies
 
 ```bash
 composer install
 ```
 
-### 3. Configurar variables de entorno
+### 3. Configure Environment Variables
 
 ```bash
 cp .env.example .env
 ```
 
-Edita `.env` con tus credenciales:
+Edit `.env` with your credentials:
 
 ```env
-DB_USER=tu_usuario
-DB_PASS=tu_password
+DB_USER=your_user
+DB_PASS=your_password
 DB_NAME=hybridge_community
 DB_HOST=localhost
-DB_ROOT_PASSWORD=tu_root_password
+DB_ROOT_PASSWORD=your_root_password
 
-JWT_SECRET=genera-un-secret-aleatorio-seguro
+JWT_SECRET=generate-a-secure-random-secret
 JWT_ACCESS_TOKEN_EXPIRY=900
 JWT_REFRESH_TOKEN_EXPIRY=604800
 
 API_DEBUG=true
 ```
 
-**Generar JWT Secret:**
+**Generate JWT Secret:**
 ```bash
 php -r "echo bin2hex(random_bytes(32));"
 ```
 
-### 4. Iniciar base de datos
+### 4. Start Database
 
 ```bash
 docker-compose up -d
 ```
 
-### 5. Importar schema de base de datos
+### 5. Import Database Schema
 
-Conecta a la base de datos (puerto 2025) e importa `database_schema.sql`:
+Connect to database (port 2025) and import `database_schema.sql`:
 
 ```bash
-mysql -h 127.0.0.1 -P 2025 -u tu_usuario -p tu_database < database_schema.sql
+mysql -h 127.0.0.1 -P 2025 -u your_user -p your_database < database_schema.sql
 ```
 
-O usa DBeaver/phpMyAdmin.
+Or use DBeaver/phpMyAdmin.
 
-### 6. Iniciar servidor PHP
+### 6. Start PHP Server
 
 ```bash
 php -S localhost:8000 -t public
 ```
 
-La API estará disponible en: `http://localhost:8000/api`
+API will be available at: `http://localhost:8000/api`
 
 ---
 
-## 📚 Documentación
+## Documentation
 
-- **[API Documentation](API_DOCUMENTATION.md)** - Todos los endpoints y ejemplos
-- **[React Integration](REACT_INTEGRATION.md)** - Guía de integración con React
-- **[Deployment Guide](DEPLOYMENT.md)** - Deploy en hosting compartido
+- **[API Documentation](API_DOCUMENTATION.md)** - Complete endpoint reference
+- **[React Integration](REACT_INTEGRATION.md)** - Frontend integration guide
+- **[Deployment Guide](DEPLOYMENT.md)** - Shared hosting deployment
+- **[Development Guide](DEVELOPMENT_GUIDE.md)** - Local development setup
+- **[Docker Guide](DOCKER_GUIDE.md)** - Containerized development
 
 ---
 
-## 🔐 Endpoints Principales
+## Main Endpoints
 
-### Autenticación (Públicos)
+### Authentication (Public)
 
 ```bash
-POST /api/auth/register  # Registrar usuario
-POST /api/auth/login     # Iniciar sesión
-POST /api/auth/refresh   # Renovar access token
+POST /api/auth/register  # Register user
+POST /api/auth/login     # Login
+POST /api/auth/refresh   # Refresh access token
 ```
 
-### Protegidos (Requieren JWT)
+### Protected (Require JWT)
 
 ```bash
-GET  /api/auth/me        # Usuario actual
-POST /api/auth/logout    # Cerrar sesión
+GET  /api/auth/me        # Current user
+POST /api/auth/logout    # Logout
 
-GET  /api/users          # Listar usuarios
-GET  /api/board          # Listar items del tablero
-POST /api/board          # Crear item
-PUT  /api/board          # Actualizar item
+GET  /api/users          # List users
+GET  /api/board          # List board items
+POST /api/board          # Create item
+PUT  /api/board          # Update item
 ```
 
 ---
 
-## 🧪 Pruebas Rápidas
+## Quick Testing
 
-### 1. Registrar usuario
+### 1. Register User
 
 ```bash
 curl -X POST http://localhost:8000/api/auth/register \
@@ -150,18 +152,18 @@ curl -X POST http://localhost:8000/api/auth/login \
   }'
 ```
 
-Guarda el `access_token` de la respuesta.
+Save the `access_token` from response.
 
-### 3. Acceder a ruta protegida
+### 3. Access Protected Route
 
 ```bash
 curl -X GET http://localhost:8000/api/auth/me \
-  -H "Authorization: Bearer TU_ACCESS_TOKEN"
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
 ---
 
-## 🏗️ Estructura del Proyecto
+## Project Structure
 
 ```
 HybridgeCommunityBackend/
@@ -169,29 +171,29 @@ HybridgeCommunityBackend/
 │   └── index.php              # Entry point
 ├── src/
 │   ├── Auth/
-│   │   └── JwtHandler.php     # Manejo de JWT
+│   │   └── JwtHandler.php     # JWT management
 │   ├── Config/
-│   │   └── database.php       # Conexión BD
+│   │   └── database.php       # Database connection
 │   ├── Controllers/
-│   │   ├── AuthController.php # Autenticación
-│   │   ├── UserController.php # Usuarios
-│   │   └── BoardController.php # Tableros
+│   │   ├── AuthController.php # Authentication
+│   │   ├── UserController.php # Users
+│   │   └── BoardController.php # Boards
 │   ├── Models/
 │   │   ├── UserModel.php
 │   │   ├── BoardItem.php
 │   │   └── RefreshTokenModel.php
 │   ├── Middlewares/
-│   │   ├── JwtAuth.php        # Middleware JWT
+│   │   ├── JwtAuth.php        # JWT middleware
 │   │   └── ApiKeyAuth.php     # API Keys (legacy)
 │   ├── Helpers/
 │   │   └── Uuid.php
 │   └── Routes/
-│       └── api.php            # Definición de rutas
-├── vendor/                    # Dependencias Composer
-├── .env                       # Variables de entorno
+│       └── api.php            # Route definitions
+├── vendor/                    # Composer dependencies
+├── .env                       # Environment variables
 ├── composer.json
 ├── docker-compose.yml
-├── database_schema.sql        # Schema de BD
+├── database_schema.sql        # Database schema
 ├── API_DOCUMENTATION.md
 ├── REACT_INTEGRATION.md
 └── DEPLOYMENT.md
@@ -199,81 +201,81 @@ HybridgeCommunityBackend/
 
 ---
 
-## 🔒 Seguridad
+## Security
 
-- ✅ Contraseñas hasheadas con bcrypt
-- ✅ Tokens JWT con expiración
-- ✅ Refresh tokens revocables
-- ✅ Prepared statements (prevención SQL injection)
-- ✅ Validación de entrada
-- ✅ Headers CORS configurables
+- Passwords hashed with bcrypt
+- JWT tokens with expiration
+- Revocable refresh tokens
+- Prepared statements (SQL injection prevention)
+- Input validation
+- Configurable CORS headers
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
-Ver [DEPLOYMENT.md](DEPLOYMENT.md) para instrucciones detalladas de deploy en hosting compartido.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions on shared hosting.
 
-**Resumen:**
+**Summary:**
 1. `composer install --no-dev`
-2. Configurar `.env` de producción
-3. Importar schema SQL
-4. Subir archivos al hosting
-5. Configurar `.htaccess`
+2. Configure production `.env`
+3. Import SQL schema
+4. Upload files to hosting
+5. Configure `.htaccess`
 
 ---
 
-## 🛠️ Tecnologías
+## Technology Stack
 
-- **PHP 8.x** - Lenguaje backend
-- **MariaDB 11.5** - Base de datos
-- **Firebase PHP-JWT** - Manejo de tokens JWT
-- **vlucas/phpdotenv** - Variables de entorno
-- **Docker** - Contenedor de base de datos
-- **PDO** - Capa de abstracción de BD
-
----
-
-## 📝 Notas
-
-- Access tokens expiran en **15 minutos**
-- Refresh tokens expiran en **7 días**
-- Puerto de base de datos: **2025** (desarrollo)
-- Cambiar `API_DEBUG=false` en producción
+- **PHP 8.x** - Backend language
+- **MariaDB 11.5** - Database
+- **Firebase PHP-JWT** - JWT token management
+- **vlucas/phpdotenv** - Environment variables
+- **Docker** - Database container
+- **PDO** - Database abstraction layer
 
 ---
 
-## 🤝 Integración con React
+## Notes
 
-Ver [REACT_INTEGRATION.md](REACT_INTEGRATION.md) para:
-- AuthContext completo
-- Manejo automático de refresh tokens
-- Componentes de ejemplo (Login, Register, Dashboard)
+- Access tokens expire in **15 minutes**
+- Refresh tokens expire in **7 days**
+- Database port: **2025** (development)
+- Set `API_DEBUG=false` in production
+
+---
+
+## React Integration
+
+See [REACT_INTEGRATION.md](REACT_INTEGRATION.md) for:
+- Complete AuthContext
+- Automatic token refresh handling
+- Example components (Login, Register, Dashboard)
 - Protected Routes
 
 ---
 
-## 📞 Soporte
+## Support
 
-Para problemas o preguntas:
-1. Revisa la documentación
-2. Verifica los logs de PHP
-3. Confirma que las dependencias están instaladas
-4. Revisa que `.env` está configurado correctamente
-
----
-
-## 📄 Licencia
-
-Este proyecto es de código abierto.
+For issues or questions:
+1. Review documentation
+2. Check PHP logs
+3. Verify dependencies are installed
+4. Confirm `.env` is configured correctly
 
 ---
 
-## 🎯 Próximos Pasos
+## License
 
-- [ ] Agregar tests unitarios (PHPUnit)
-- [ ] Implementar rate limiting
-- [ ] Agregar paginación en listados
-- [ ] Implementar método DELETE para boards
-- [ ] Agregar roles y permisos avanzados
-- [ ] Documentación OpenAPI/Swagger
+This project is open source.
+
+---
+
+## Next Steps
+
+- Add unit tests (PHPUnit)
+- Implement rate limiting
+- Add pagination to listings
+- Implement DELETE method for boards
+- Add advanced roles and permissions
+- OpenAPI/Swagger documentation

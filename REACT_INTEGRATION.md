@@ -1,4 +1,4 @@
-# ⚛️ React Integration Examples
+# React Integration Examples
 
 ## Installation
 
@@ -495,7 +495,7 @@ const fetchProtectedData = async () => {
 
 ---
 
-## 🔒 Security Best Practices
+## Security Best Practices
 
 1. **Store tokens in localStorage** (or sessionStorage for more security)
 2. **Never expose tokens in URLs**
@@ -506,7 +506,7 @@ const fetchProtectedData = async () => {
 
 ---
 
-## 📝 Notes
+## Notes
 
 - The access token expires in 15 minutes
 - The refresh token expires in 7 days

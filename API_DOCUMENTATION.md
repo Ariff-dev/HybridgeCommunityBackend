@@ -1,4 +1,4 @@
-# 🔐 API Authentication Documentation
+# API Authentication Documentation
 
 ## Base URL
 ```
@@ -7,7 +7,7 @@ http://localhost/api
 
 ---
 
-## 📋 Authentication Endpoints
+## Authentication Endpoints
 
 ### 1. Register New User
 
@@ -154,7 +154,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-## 👥 User Endpoints (Protected)
+## User Endpoints (Protected)
 
 ### Get All Users
 
@@ -184,7 +184,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-## 📋 Board Endpoints (Protected)
+## Board Endpoints (Protected)
 
 ### Get All Board Items
 
@@ -274,7 +274,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-## ⚠️ Error Responses
+## Error Responses
 
 ### 400 Bad Request
 ```json
@@ -318,7 +318,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-## 🔒 Authentication Flow
+## Authentication Flow
 
 ```
 1. User registers → POST /api/auth/register
@@ -340,7 +340,7 @@ Authorization: Bearer <access_token>
 
 ---
 
-## 📝 Notes
+## Notes
 
 - All protected endpoints require `Authorization: Bearer <token>` header
 - Access tokens expire in 15 minutes

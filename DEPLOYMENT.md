@@ -1,4 +1,4 @@
-# 🚀 Deployment Guide - Hosting Compartido
+# Deployment Guide - Hosting Compartido
 
 ## Pasos para Deploy
 
@@ -28,7 +28,7 @@ JWT_ACCESS_TOKEN_EXPIRY=900
 JWT_REFRESH_TOKEN_EXPIRY=604800
 
 # API Configuration
-API_DEBUG=false  # ⚠️ IMPORTANTE: false en producción
+API_DEBUG=false  # IMPORTANTE: false en producción
 ```
 
 ### 3. Generar JWT Secret Seguro
@@ -48,7 +48,7 @@ php -r "echo bin2hex(random_bytes(32));"
 │   │   └── index.php         # Proxy al backend
 │   └── .htaccess            # Configuración Apache
 │
-└── backend/                  # ⚠️ FUERA de public_html
+└── backend/                  # FUERA de public_html
     ├── src/
     ├── vendor/
     ├── .env
@@ -141,7 +141,7 @@ curl https://tu-dominio.com/api/auth/register \
 
 ---
 
-## 🔒 Seguridad en Producción
+## Seguridad en Producción
 
 ### Archivo .htaccess Completo
 
@@ -203,7 +203,7 @@ session.use_strict_mode = 1
 
 ---
 
-## 📋 Checklist de Deploy
+## Checklist de Deploy
 
 - [ ] Composer install ejecutado
 - [ ] .env configurado con credenciales de producción
@@ -221,7 +221,7 @@ session.use_strict_mode = 1
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Error: "Class 'Dotenv\Dotenv' not found"
 ```bash
@@ -255,7 +255,7 @@ header('Access-Control-Allow-Origin: *');
 
 ---
 
-## 📞 Soporte
+## Soporte
 
 Si tienes problemas:
 1. Revisa los logs de PHP
