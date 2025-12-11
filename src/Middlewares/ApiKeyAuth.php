@@ -38,7 +38,7 @@ class ApiKeyAuth {
                       FROM api_keys
                       WHERE key_value = :key
                       AND is_active = 1
-                      AND (expires IS NULL OR expires_at -> NOW();
+                      AND (expires_at IS NULL OR expires_at > NOW())
                       LIMIT 1;
                     ";
             $stmt = $this->conn->prepare($query);

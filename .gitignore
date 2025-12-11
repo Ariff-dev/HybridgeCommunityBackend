@@ -1,5 +1,64 @@
+# Environment variables (SENSITIVE - never commit)
 .env
-.git/
-*.log
+.env.local
+.env.production
+
+# Dependencies
 /vendor/
+composer.phar
+composer.lock
+
+# Database
 /db/
+*.sql.gz
+*.sql.zip
+
+# Logs
+*.log
+/logs/
+error_log
+php_errors.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+/tmp/
+/temp/
+*.tmp
+*.cache
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Node modules (if you add any frontend build tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Git
+.git/
+
+# PHPUnit
+/phpunit.xml
+/.phpunit.cache/
+/coverage/
+
+# Deployment
+.deploy/
+deploy.sh

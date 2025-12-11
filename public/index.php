@@ -8,7 +8,7 @@ require_once $projectRoot . '/vendor/autoload.php';
 header('Content-Type: application/json; charset=utf-8;');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Origin: Content-Type, Authorization');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 //?Preflight
 if ( $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -30,12 +30,13 @@ try {
     
     if ( $endpoint == 'api') {
         array_shift($uriParts);
-        $endpoint = $uriParts[0] ?? '';
+        $endpoint = implode('/', $uriParts);
     }
 
-    require_once __DIR__ . '/src/Routes/api.php';
+    require_once __DIR__ . '/../src/Routes/api.php';
 
-    // handleRoute
+    // Handle route
+    handleRoute($method, $endpoint);
 
 } catch(Exception $e) {
     http_response_code(500);
@@ -46,16 +47,41 @@ try {
 }
 
 
-function handleRoute($method, $endpoint, $uriParts){
+function handleRoute($method, $endpoint){
     global $routes;
 
-    $routeKey = 'method:$enpoint';
+    $routeKey = "{$method}:{$endpoint}";
 
     if ( isset($routes[$routeKey]) ){
         $route = $routes[$routeKey];
 
-        // Controller instance
-        
+        // Check if authentication is required
+        if (isset($route['auth']) && $route['auth'] === true) {
+            requireJwtAuth();
+        }
+
+        // Get controller and action
+        $controllerName = $route['controller'];
+        $action = $route['action'];
+
+        // Instantiate controller
+        $controller = new $controllerName();
+
+        // Call action
+        if (method_exists($controller, $action)) {
+            $controller->$action();
+        } else {
+            http_response_code(404);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Action not found'
+            ]);
+        }
+    } else {
+        http_response_code(404);
+        echo json_encode([
+            'error' => true,
+            'message' => 'Route not found'
+        ]);
     }
 }
-

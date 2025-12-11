@@ -10,7 +10,7 @@ class BoardController {
     private $boardItem;
     private $apiKeyData;
 
-    private function __construct(){
+    public function __construct(){
         $this->db = new Database();
         $this->conn = $this->db->getConnection();
         $this->boardItem = new BoardItem($this->conn);
@@ -102,6 +102,15 @@ class BoardController {
             $this->boardItem->state = $data['state'];
             $this->boardItem->assigned = $data['assigned'];
 
+            if ($this->boardItem->update()) {
+                http_response_code(200);
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Item updated successfully'
+                ]);
+            } else {
+                throw new Exception('Error updating item');
+            }
         } catch (PDOException $e) {
             http_response_code(500);
               echo json_encode([
@@ -110,6 +119,7 @@ class BoardController {
             ]);
         }
     }
+
 
 
 
