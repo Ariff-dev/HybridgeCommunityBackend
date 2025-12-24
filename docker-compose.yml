@@ -9,16 +9,12 @@ services:
     volumes:
       - ./:/var/www
     ports:
-      - "8000:8000"
+      - "8001:8000"
     networks:
       - dev_network_community
     depends_on:
       - mariadb
-    command: >
-      bash -c " apt-get update &&  apt-get install -y libzip-dev zip unzip git curl && docker-php-ext-install pdo pdo_mysql zip && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && composer install && php -S 0.0.0.0:8000 -t public "
-    environment:
-      - DB_HOST=mariadb
-      - DB_PORT=3306
+    command: bash /var/www/docker-start.sh
     stdin_open: true
     tty: true
 
