@@ -5,13 +5,16 @@ require_once $projectRoot . '/vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
+// Desarrollo
+header("Access-Control-Allow-Origin: http://localhost:5173");
+
 header('Content-Type: application/json; charset=utf-8;');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 //?Preflight
-if ( $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
@@ -27,8 +30,8 @@ $uriParts = explode('/', $uri);
 try {
 
     $endpoint = $uriParts[0];
-    
-    if ( $endpoint == 'api') {
+
+    if ($endpoint == 'api') {
         array_shift($uriParts);
         $endpoint = implode('/', $uriParts);
     }
@@ -38,21 +41,22 @@ try {
     // Handle route
     handleRoute($method, $endpoint);
 
-} catch(Exception $e) {
+} catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
-        'error'=> true,
-        'message'=> $_ENV['API_DEBUG'] === 'true' ? $e->getMessage(): 'Error interno del servidor'
+        'error' => true,
+        'message' => $_ENV['API_DEBUG'] === 'true' ? $e->getMessage() : 'Error interno del servidor'
     ]);
 }
 
 
-function handleRoute($method, $endpoint){
+function handleRoute($method, $endpoint)
+{
     global $routes;
 
     $routeKey = "{$method}:{$endpoint}";
 
-    if ( isset($routes[$routeKey]) ){
+    if (isset($routes[$routeKey])) {
         $route = $routes[$routeKey];
 
         // Check if authentication is required

@@ -5,14 +5,16 @@ require_once __DIR__ . '/../Auth/JwtHandler.php';
 require_once __DIR__ . '/../Models/UserModel.php';
 require_once __DIR__ . '/../Models/RefreshTokenModel.php';
 
-class AuthController {
+class AuthController
+{
     private $db;
     private $conn;
     private $userModel;
     private $refreshTokenModel;
     private $jwtHandler;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
         $this->conn = $this->db->getConnection();
         $this->userModel = new UserModel($this->conn);
@@ -24,7 +26,8 @@ class AuthController {
      * Register a new user
      * POST /api/auth/register
      */
-    public function register() {
+    public function register()
+    {
         $data = json_decode(file_get_contents("php://input"), true);
 
         // Validate input
@@ -43,6 +46,17 @@ class AuthController {
             echo json_encode([
                 'error' => true,
                 'message' => 'Invalid email format'
+            ]);
+            return;
+        }
+
+        // Validate email domain (university-only)
+        $emailDomain = substr(strrchr($data['email'], "@"), 1);
+        if ($emailDomain !== 'hybridge.education') {
+            http_response_code(400);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Email does not meet registration requirements'
             ]);
             return;
         }
@@ -105,7 +119,8 @@ class AuthController {
      * Login user
      * POST /api/auth/login
      */
-    public function login() {
+    public function login()
+    {
         $data = json_decode(file_get_contents("php://input"), true);
 
         // Validate input
@@ -157,7 +172,7 @@ class AuthController {
                     'access_token' => $accessToken,
                     'refresh_token' => $refreshToken,
                     'token_type' => 'Bearer',
-                    'expires_in' => (int)$_ENV['JWT_ACCESS_TOKEN_EXPIRY'] ?? 900,
+                    'expires_in' => (int) $_ENV['JWT_ACCESS_TOKEN_EXPIRY'] ?? 900,
                     'user' => [
                         'id' => $user['id_user'],
                         'name' => $user['name'],
@@ -178,7 +193,8 @@ class AuthController {
      * Refresh access token
      * POST /api/auth/refresh
      */
-    public function refresh() {
+    public function refresh()
+    {
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (!isset($data['refresh_token'])) {
@@ -224,7 +240,7 @@ class AuthController {
                 'data' => [
                     'access_token' => $accessToken,
                     'token_type' => 'Bearer',
-                    'expires_in' => (int)$_ENV['JWT_ACCESS_TOKEN_EXPIRY'] ?? 900
+                    'expires_in' => (int) $_ENV['JWT_ACCESS_TOKEN_EXPIRY'] ?? 900
                 ]
             ]);
         } catch (Exception $e) {
@@ -240,7 +256,8 @@ class AuthController {
      * Logout user
      * POST /api/auth/logout
      */
-    public function logout() {
+    public function logout()
+    {
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (!isset($data['refresh_token'])) {
@@ -274,7 +291,8 @@ class AuthController {
      * Get current authenticated user
      * GET /api/auth/me
      */
-    public function me() {
+    public function me()
+    {
         // Get user from request context (set by middleware)
         global $currentUser;
 

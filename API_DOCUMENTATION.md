@@ -37,7 +37,7 @@ http://localhost/api
 
 **Validation Rules:**
 - `name`: Required
-- `email`: Required, valid email format
+- `email`: Required, valid email format, must meet institutional requirements
 - `password`: Required, minimum 6 characters
 
 ---
@@ -281,6 +281,14 @@ Authorization: Bearer <access_token>
 {
   "error": true,
   "message": "Email and password are required"
+}
+```
+
+**Email validation errors:**
+```json
+{
+  "error": true, 
+  "message": "Email does not meet registration requirements"
 }
 ```
 
