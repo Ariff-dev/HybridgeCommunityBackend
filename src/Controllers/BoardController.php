@@ -2,29 +2,34 @@
 
 require_once __DIR__ . '/../Config/database.php';
 require_once __DIR__ . '/../Models/BoardItem.php';
-require_once __DIR__ . '/../Middlewares/ApiKeyAuth.php';
-class BoardController {
+class BoardController
+{
 
     private $db;
     private $conn;
     private $boardItem;
-    private $apiKeyData;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->db = new Database();
         $this->conn = $this->db->getConnection();
         $this->boardItem = new BoardItem($this->conn);
     }
 
-    private function authenticate($requiredPermission = null) {
-        $this->apiKeyData = requireApiKey();
-        if ($requiredPermission) {
-            requirePermission($this->apiKeyData, $requiredPermission);
-        }
-    }
 
-    public function index($id = null) {
-        $this->authenticate('read'); 
+
+    public function index($id = null)
+    {
+        global $currentUser;
+
+        if (!$currentUser) {
+            http_response_code(401);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Unauthorized'
+            ]);
+            return;
+        }
 
         try {
             $items = $this->boardItem->getAll();
@@ -38,13 +43,23 @@ class BoardController {
             http_response_code(500);
             echo json_encode([
                 'error' => true,
-                'message' => 'Error' . $e->getMessage() 
+                'message' => 'Error' . $e->getMessage()
             ]);
         }
     }
 
-    public function store($id = null) {
-        $this->authenticate('write');
+    public function store($id = null)
+    {
+        global $currentUser;
+
+        if (!$currentUser) {
+            http_response_code(401);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Unauthorized'
+            ]);
+            return;
+        }
 
         $data = json_decode(file_get_contents("php://input"), true);
 
@@ -57,7 +72,7 @@ class BoardController {
             return;
         }
 
-        try  {
+        try {
             $this->boardItem->name = $data['name'];
             $this->boardItem->description = $data['description'];
             $this->boardItem->state = $data['state'];
@@ -81,10 +96,20 @@ class BoardController {
         }
     }
 
-    public function update($id = null) {
-        $this->authenticate('write');
+    public function update($id = null)
+    {
+        global $currentUser;
 
-        $data = json_decode(file_get_contents("php://input"),true);
+        if (!$currentUser) {
+            http_response_code(401);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Unauthorized'
+            ]);
+            return;
+        }
+
+        $data = json_decode(file_get_contents("php://input"), true);
 
         if (!isset($data['id_board'])) {
             http_response_code(400);
@@ -113,7 +138,7 @@ class BoardController {
             }
         } catch (PDOException $e) {
             http_response_code(500);
-              echo json_encode([
+            echo json_encode([
                 'error' => true,
                 'message' => $e->getMessage()
             ]);

@@ -2,29 +2,35 @@
 
 require_once __DIR__ . '/../Models/UserModel.php';
 
-class UserController {
+class UserController
+{
     private $userModel;
     private $db;
     private $conn;
-    private $apiKeyData;
 
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = new Database();
         $this->conn = $this->db->getConnection();
         $this->userModel = new UserModel($this->conn);
     }
 
-    private function authenticate($requiredPermission = null) {
-        $this->apiKeyData = requireApiKey();
-        if ($requiredPermission) {
-            requirePermission($this->apiKeyData, $requiredPermission);
+
+
+
+    public function getAll()
+    {
+        global $currentUser;
+
+        if (!$currentUser) {
+            http_response_code(401);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Unauthorized'
+            ]);
+            return;
         }
-    }
-
-
-    public function getAll() {
-        $this->authenticate('read');
 
         try {
             $result = $this->userModel->getAll();
@@ -43,8 +49,18 @@ class UserController {
         }
     }
 
-    public function getUserByEmail($email) {
-        $this->authenticate('read');
+    public function getUserByEmail($email)
+    {
+        global $currentUser;
+
+        if (!$currentUser) {
+            http_response_code(401);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Unauthorized'
+            ]);
+            return;
+        }
         try {
             $result = $this->userModel->getUserByEmail($email);
             http_response_code(200);
@@ -62,8 +78,18 @@ class UserController {
         }
     }
 
-    public function createUser($data) {
-        $this->authenticate('write');
+    public function createUser($data)
+    {
+        global $currentUser;
+
+        if (!$currentUser) {
+            http_response_code(401);
+            echo json_encode([
+                'error' => true,
+                'message' => 'Unauthorized'
+            ]);
+            return;
+        }
         try {
             $result = $this->userModel->createUser($data);
             http_response_code(200);
