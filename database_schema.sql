@@ -39,7 +39,13 @@ CREATE TABLE IF NOT EXISTS board (
     INDEX idx_assigned (assigned)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- API Keys table (if not exists)
+/*
+======================================
+DEPRECATED: API Keys System
+======================================
+Removed in favor of JWT authentication
+Migration date: 2025-12-27
+
 CREATE TABLE IF NOT EXISTS api_keys (
     id INT AUTO_INCREMENT PRIMARY KEY,
     key_value VARCHAR(255) UNIQUE NOT NULL,
@@ -52,3 +58,4 @@ CREATE TABLE IF NOT EXISTS api_keys (
     INDEX idx_key_value (key_value),
     INDEX idx_is_active (is_active)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+*/
