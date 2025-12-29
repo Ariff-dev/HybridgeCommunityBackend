@@ -3,7 +3,9 @@ version: '3.8'
 services:
   # PHP Service
   php:
-    image: php:8.2-cli
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: hybridge_php
     working_dir: /var/www
     volumes:
@@ -13,8 +15,8 @@ services:
     networks:
       - dev_network_community
     depends_on:
-      - mariadb
-    command: bash /var/www/docker-start.sh
+      mariadb:
+        condition: service_healthy
     stdin_open: true
     tty: true
 
@@ -35,6 +37,12 @@ services:
       - ./database_schema.sql:/docker-entrypoint-initdb.d/schema.sql
     networks:
       - dev_network_community
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
   mariadb_data:

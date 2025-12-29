@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../Controllers/UserController.php';
 require_once __DIR__ . '/../Controllers/BoardController.php';
 require_once __DIR__ . '/../Controllers/AuthController.php';
+require_once __DIR__ . '/../Controllers/BlogPostController.php';
 require_once __DIR__ . '/../Middlewares/JwtAuth.php';
 
 $routes = [
@@ -32,7 +33,7 @@ $routes = [
         'action' => 'me',
         'auth' => true
     ],
-    
+
     // User routes (protected)
     'GET:users' => [
         'controller' => 'UserController',
@@ -44,7 +45,7 @@ $routes = [
         'action' => 'getUserByEmail',
         'auth' => true
     ],
-    
+
     // Board routes (protected)
     'GET:board' => [
         'controller' => 'BoardController',
@@ -60,5 +61,42 @@ $routes = [
         'controller' => 'BoardController',
         'action' => 'update',
         'auth' => true
+    ],
+
+    // Blog Post routes
+    'GET:blog/posts' => [
+        'controller' => 'BlogPostController',
+        'action' => 'index',
+        'auth' => false  // Public route - can list posts without auth
+    ],
+    'GET:blog/posts/{id}' => [
+        'controller' => 'BlogPostController',
+        'action' => 'show',
+        'auth' => false  // Public route - can view single post without auth
+    ],
+    'POST:blog/posts' => [
+        'controller' => 'BlogPostController',
+        'action' => 'store',
+        'auth' => true  // Protected - requires authentication to create
+    ],
+    'PUT:blog/posts/{id}' => [
+        'controller' => 'BlogPostController',
+        'action' => 'update',
+        'auth' => true  // Protected - requires authentication to update
+    ],
+    'DELETE:blog/posts/{id}' => [
+        'controller' => 'BlogPostController',
+        'action' => 'delete',
+        'auth' => true  // Protected - requires authentication to delete
+    ],
+    'POST:blog/posts/{id}/publish' => [
+        'controller' => 'BlogPostController',
+        'action' => 'publish',
+        'auth' => true  // Protected - requires authentication to publish
+    ],
+    'POST:blog/posts/{id}/like' => [
+        'controller' => 'BlogPostController',
+        'action' => 'toggleLike',
+        'auth' => true  // Protected - requires authentication to like
     ]
 ];

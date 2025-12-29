@@ -67,27 +67,42 @@ API_DEBUG=true
 php -r "echo bin2hex(random_bytes(32));"
 ```
 
-### 4. Start Database
+### 4. Start with Docker (Recommended)
+
+**Option A: Full Docker (Recommended)**
+
+Start both PHP and MariaDB with one command:
 
 ```bash
 docker-compose up -d
 ```
 
-### 5. Import Database Schema
+The database schema will be imported automatically on first run.
 
-Connect to database (port 2025) and import `database_schema.sql`:
+API will be available at: `http://localhost:8001/api`
 
-```bash
-mysql -h 127.0.0.1 -P 2025 -u your_user -p your_database < database_schema.sql
-```
+---
 
-Or use DBeaver/phpMyAdmin.
+**Option B: Hybrid (MariaDB in Docker, PHP Native)**
 
-### 6. Start PHP Server
+If you prefer running PHP on your host machine:
 
-```bash
-php -S localhost:8000 -t public
-```
+1. Start only the database:
+   ```bash
+   docker-compose up -d mariadb
+   ```
+
+2. Update `.env` with `DB_HOST=localhost` (instead of `mariadb`)
+
+3. Import schema manually:
+   ```bash
+   mysql -h 127.0.0.1 -P 2025 -u your_user -p your_database < database_schema.sql
+   ```
+
+4. Start PHP server:
+   ```bash
+   php -S localhost:8000 -t public
+   ```
 
 API will be available at: `http://localhost:8000/api`
 
@@ -129,10 +144,12 @@ PUT  /api/board          # Update item
 
 ## Quick Testing
 
+**Note:** Use `http://localhost:8001/api` if running with Docker, or `http://localhost:8000/api` if running PHP natively.
+
 ### 1. Register User
 
 ```bash
-curl -X POST http://localhost:8000/api/auth/register \
+curl -X POST http://localhost:8001/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "name": "John Doe",
@@ -144,7 +161,7 @@ curl -X POST http://localhost:8000/api/auth/register \
 ### 2. Login
 
 ```bash
-curl -X POST http://localhost:8000/api/auth/login \
+curl -X POST http://localhost:8001/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "john@example.com",
@@ -157,7 +174,7 @@ Save the `access_token` from response.
 ### 3. Access Protected Route
 
 ```bash
-curl -X GET http://localhost:8000/api/auth/me \
+curl -X GET http://localhost:8001/api/auth/me \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 

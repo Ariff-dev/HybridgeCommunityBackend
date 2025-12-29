@@ -102,17 +102,20 @@ class BlogPostModel
      */
     public function create($data)
     {
+        // Default status to draft if not provided
+        $status = $data['status'] ?? 'draft';
+
+        // Set published_at if status is published
+        $publishedAt = ($status === 'published') ? 'NOW()' : 'NULL';
+
         $query = "INSERT INTO " . $this->table . " 
-                  (id_post, author_id, title, content_markdown, excerpt, cover_image_url, status, created_at, updated_at) 
-                  VALUES (:id_post, :author_id, :title, :content_markdown, :excerpt, :cover_image_url, :status, NOW(), NOW())";
+                  (id_post, author_id, title, content_markdown, excerpt, cover_image_url, status, published_at, created_at, updated_at) 
+                  VALUES (:id_post, :author_id, :title, :content_markdown, :excerpt, :cover_image_url, :status, $publishedAt, NOW(), NOW())";
 
         $stmt = $this->conn->prepare($query);
 
         // Generate UUID
         $uuid = Uuid::generate();
-
-        // Default status to draft if not provided
-        $status = $data['status'] ?? 'draft';
 
         $stmt->bindParam(':id_post', $uuid);
         $stmt->bindParam(':author_id', $data['author_id']);
